@@ -1,6 +1,7 @@
 import boto3
 import os
 
+from boto3 import ImportError
 from flask import Flask, request, redirect, render_template, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from uuid import uuid4
@@ -13,6 +14,10 @@ load_dotenv()
 
 ACCESS_KEY = os.environ['ACCESS_KEY']
 SECRET_ACCESS_KEY = os.environ['SECRET_ACCESS_KEY']
+S3_INFO = {
+    "bucket": os.environ['BUCKET'],
+    "region": "us-west-1"
+}
 
 
 app = Flask(__name__)
@@ -39,10 +44,17 @@ aws_secret_access_key=SECRET_ACCESS_KEY,
 
 bucket = os.environ['BUCKET']
 
-@app.post('/api/host')
-def host_picture_on_server():
-    """Host picture on aws server and return JSON of db record"""
-    data = request.data
+@app.post('/api/add')
+def add_picture():
+    """Add picture to aws server/db and return html link"""
+    filename = request.data
+    obj_name = uuid4()
+
+    #TODO: potentially try/except this line
+    s3.upload_file(filename, bucket, obj_name)
+    url = f"https://{S3_INFO['bucket']}.s3.{S3_INFO['region']}.amazonaws.com/{filename}"
+
+    return url
 
 
 
