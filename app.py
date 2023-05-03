@@ -3,6 +3,7 @@ import os
 
 from flask import Flask, request, redirect, render_template, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
+from uuid import uuid4
 
 
 from models import db, connect_db, Class #ex: Pet
@@ -18,7 +19,7 @@ app = Flask(__name__)
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    "DATABASE_URL", 'postgresql:///sqla_intro') #must link to db
+    "DATABASE_URL", 'postgresql:///pixly') #must link to db
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True #always true to see sql in terminal
 
@@ -37,3 +38,23 @@ aws_secret_access_key=SECRET_ACCESS_KEY,
 )
 
 bucket = os.environ['BUCKET']
+
+@app.post('/api/host')
+def host_picture_on_server():
+    """Host picture on aws server and return JSON of db record"""
+    data = request.data
+
+
+
+
+# onSubmit:
+#     filename = input.filename
+#     obj_name = uuid4()
+#     Pictures.add(...metadata, obj_name)
+#     s3.upload_file(filename, bucketname, obj_name)
+
+# onSearch:
+#     term = input.term
+#     picture_record = Pictures.query.all(where id = id)
+#     html_link = s3.PresignedUrl(picture_record.obj_name, exp=3600)
+#     return html_link
