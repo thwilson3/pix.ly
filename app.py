@@ -6,7 +6,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from uuid import uuid4
 
 
-from models import db, connect_db, Class #ex: Pet
+from models import db, connect_db
 from dotenv import load_dotenv
 
 load_dotenv()
