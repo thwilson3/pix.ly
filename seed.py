@@ -1,9 +1,10 @@
-from app import app
+from app import app #This needs to be here even if it isn't accessed
 from models import db, Pictures
 
-with app.app_context():
-    db.drop_all
-    db.create_all()
+# with app.app_context():
+
+db.drop_all()
+db.create_all()
 
 
 
@@ -12,7 +13,7 @@ picture1 = Pictures(
     dimension='1200x800',
     location='New York City',
     device_make='Canon',
-    object_name='Statue of Liberty'
+    object_name='test1'
 )
 
 picture2 = Pictures(
@@ -20,7 +21,7 @@ picture2 = Pictures(
     dimension='1600x900',
     location='San Francisco',
     device_make='Nikon',
-    object_name='Golden Gate Bridge'
+    object_name='test2'
 )
 
 picture3 = Pictures(
@@ -28,7 +29,7 @@ picture3 = Pictures(
     dimension='800x600',
     location='Paris',
     device_make='Sony',
-    object_name='Eiffel Tower'
+    object_name='test3'
 )
 
 db.session.add_all([picture1, picture2, picture3])
