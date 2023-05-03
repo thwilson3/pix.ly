@@ -1,0 +1,44 @@
+digraph Pixly {
+
+  // Light Mode
+//   graph [pad="0.5", ranksep="0.4 equally", nodesep="0.6", fontsize="10pt"];
+//   node [fontsize="10pt", shape="rectangle", margin="0.15"];
+//   edge [fontsize="8pt", penwidth="1.5", arrowhead="vee"];
+
+  // Dark Mode
+  graph [pad="0.5", ranksep="0.4 equally", nodesep="0.6", fontsize="10pt", bgcolor="black"];
+  node [fontsize="10pt", shape="rectangle", margin="0.15", fontcolor="white", color="white", fillcolor="gray30", style="filled"];
+  edge [fontsize="8pt", penwidth="1.5", arrowhead="vee", color="white", fontcolor="white"];
+
+  // Nodes & Edges
+
+//   App [label="App\n\nState:\nisLoading\nsnacks\ndrinks"]
+
+  Backend -> Add
+  Add -> "Search Term"
+  "Search Term" -> "Add To AWS\nQuery AWS For HTML"
+  "Add To AWS\nQuery AWS For HTML" -> "HTML Link\nStatus Code 201"
+
+  Backend -> Search
+  Search -> "Query DB\nQuery AWS"
+  "Query DB\nQuery AWS" -> "HTML Link"
+
+  Frontend -> "Upload Form"
+  Frontend -> "Search Form"
+  "Upload Form" -> "BACKEND\nAdd Route" [label="filename"]
+  "Search Form" -> "BACKEND\nSearch Route" [label="search term"]
+  Frontend -> "Picture Container" [label="array of links"]
+  "Picture Container" -> "Show IMGs On Page"
+}
+
+# onSubmit:
+#     filename = input.filename
+#     obj_name = uuid4()
+#     Pictures.add(...metadata, obj_name)
+#     s3.upload_file(filename, bucketname, obj_name)
+
+# onSearch:
+#     term = input.term
+#     picture_record = Pictures.query.all(where id = id)
+#     html_link = s3.PresignedUrl(picture_record.obj_name, exp=3600)
+#     return html_link
