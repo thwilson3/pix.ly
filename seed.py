@@ -1,7 +1,10 @@
+from app import app
 from models import db, Pictures
 
-db.drop_all()
-db.create_all()
+with app.app_context():
+    db.drop_all
+    db.create_all()
+
 
 
 picture1 = Pictures(
