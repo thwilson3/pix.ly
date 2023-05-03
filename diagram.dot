@@ -15,12 +15,12 @@ digraph Pixly {
 //   App [label="App\n\nState:\nisLoading\nsnacks\ndrinks"]
 
   Backend -> Add
-  Add -> "Search Term"
-  "Search Term" -> "Add To AWS\nQuery AWS For HTML"
+  Add -> "Add To AWS\nQuery AWS For HTML"
   "Add To AWS\nQuery AWS For HTML" -> "HTML Link\nStatus Code 201"
 
   Backend -> Search
-  Search -> "Query DB\nQuery AWS"
+  Search -> "Search Term"
+  "Search Term" -> "Query DB\nQuery AWS"
   "Query DB\nQuery AWS" -> "HTML Link"
 
   Frontend -> "Upload Form"
