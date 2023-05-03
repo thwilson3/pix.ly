@@ -1,6 +1,9 @@
 """SQLAlchemy models for Pixley"""
 
 from flask_sqlalchemy import SQLAlchemy
+from ts_vector import TSVector
+import sqlalchemy as sa
+from sqlalchemy import Index
 
 db = SQLAlchemy()
 
@@ -15,10 +18,11 @@ def connect_db(app):
     db.init_app(app)
 
 
+
 class Pictures(db.Model):
     """Photos in the system. """
 
-    __tablename__ = 'pictures'
+    __tablename__ = "pictures"
 
     id = db.Column(
         db.Integer,
@@ -40,7 +44,17 @@ class Pictures(db.Model):
 
     object_name = db.Column(
         db.Text,
+        # name = 'file_name'
     )
+
+
+    __ts_vector__ = db.Column(TSVector(),db.Computed(
+         "to_tsvector('english', dimension || ' ' || location || ' ' || device_make || ' ' || object_name)",
+         persisted=True))
+    # __table_args__ = (Index('ix_pictures___ts_vector__',
+    #       __ts_vector__, postgresql_using='gin'),)
+
+
 
 
 # user uploads photo

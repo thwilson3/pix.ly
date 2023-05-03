@@ -1,13 +1,12 @@
 import boto3
 import os
 
-from boto3 import ImportError
 from flask import Flask, request, redirect, render_template, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from uuid import uuid4
 
 
-from models import db, connect_db
+from models import db, connect_db, Pictures
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,21 +41,34 @@ aws_access_key_id=ACCESS_KEY,
 aws_secret_access_key=SECRET_ACCESS_KEY,
 )
 
-bucket = os.environ['BUCKET']
-
 @app.post('/api/add')
 def add_picture():
     """Add picture to aws server/db and return html link"""
     filename = request.data
     obj_name = uuid4()
+    print('file - ADD ROUTE', request.files)
+    # file = request.files['file']
 
     #TODO: potentially try/except this line
-    s3.upload_file(filename, bucket, obj_name)
+    s3.upload_file(filename, S3_INFO['bucket'] , obj_name)
     url = f"https://{S3_INFO['bucket']}.s3.{S3_INFO['region']}.amazonaws.com/{filename}"
 
     return url
 
 
+@app.get('/api/pictures')
+def search():
+    """Either gets all pictures or searches for specific images """
+    #if there is a query term in request then
+
+    search = request.args.get('q')
+
+    results = Pictures.query.filter(Pictures.description.match(search)).all()
+
+    # if not search:
+    #     pictures = Pictures.query.all()
+    # else:
+    #     users = Pictures.query.filter(User.username.like(f"%{search}%")).all()
 
 
 # onSubmit:

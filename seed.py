@@ -7,7 +7,6 @@ db.drop_all()
 db.create_all()
 
 
-
 picture1 = Pictures(
     id=1,
     dimension='1200x800',
