@@ -2,7 +2,7 @@ import boto3
 import os
 import PIL.Image
 
-from flask import Flask, request, redirect, render_template, jsonify
+from flask import Flask, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from uuid import uuid4
 from flask_cors import CORS
@@ -49,24 +49,20 @@ def add_picture():
     """Add picture to aws server/db and return html link"""
     file = request.files['image']
 
-    #TODO: CHANGE VARIABLE NAME, THIS IS WORKING I THINK
-    image2 = PIL.Image.open(file)
-    print("IMG2===================", image2)
+    # open_file = PIL.Image.open(file)
 
+    # exif_data2 = open_file._getexif()
 
-    exif_data2 = image2._getexif()
-    print("REQ.FILES========================", request.files)
+    # print("file====================", exif_data2)
 
-    print("file====================", exif_data2)
-    # obj_name = uuid4()
-    # print('file - ADD ROUTE', request.files)
-    # # file = request.files['file']
+    file.seek(0)
+    s3.upload_fileobj(file, S3_INFO['bucket'], file.filename)
 
     # #TODO: potentially try/except this line
-    # s3.upload_file(filename, S3_INFO['bucket'] , obj_name)
-    # url = f"https://{S3_INFO['bucket']}.s3.{S3_INFO['region']}.amazonaws.com/{filename}"
+    url = f"https://{S3_INFO['bucket']}.s3.{S3_INFO['region']}.amazonaws.com/{file.filename}"
 
-    return "all good"
+
+    return url
 
 
 @app.get('/api/pictures')
