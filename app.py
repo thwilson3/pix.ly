@@ -1,9 +1,11 @@
 import boto3
 import os
+import PIL.Image
 
 from flask import Flask, request, redirect, render_template, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from uuid import uuid4
+from flask_cors import CORS
 
 
 from models import db, connect_db, Pictures
@@ -20,6 +22,7 @@ S3_INFO = {
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
@@ -44,16 +47,26 @@ aws_secret_access_key=SECRET_ACCESS_KEY,
 @app.post('/api/add')
 def add_picture():
     """Add picture to aws server/db and return html link"""
-    filename = request.data
-    obj_name = uuid4()
-    print('file - ADD ROUTE', request.files)
-    # file = request.files['file']
+    file = request.files['image']
 
-    #TODO: potentially try/except this line
-    s3.upload_file(filename, S3_INFO['bucket'] , obj_name)
-    url = f"https://{S3_INFO['bucket']}.s3.{S3_INFO['region']}.amazonaws.com/{filename}"
+    #TODO: CHANGE VARIABLE NAME, THIS IS WORKING I THINK
+    image2 = PIL.Image.open(file)
+    print("IMG2===================", image2)
 
-    return url
+
+    exif_data2 = image2._getexif()
+    print("REQ.FILES========================", request.files)
+
+    print("file====================", exif_data2)
+    # obj_name = uuid4()
+    # print('file - ADD ROUTE', request.files)
+    # # file = request.files['file']
+
+    # #TODO: potentially try/except this line
+    # s3.upload_file(filename, S3_INFO['bucket'] , obj_name)
+    # url = f"https://{S3_INFO['bucket']}.s3.{S3_INFO['region']}.amazonaws.com/{filename}"
+
+    return "all good"
 
 
 @app.get('/api/pictures')
