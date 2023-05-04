@@ -49,11 +49,11 @@ def add_picture():
     """Add picture to aws server/db and return html link"""
     file = request.files['image']
 
-    # open_file = PIL.Image.open(file)
+    open_file = PIL.Image.open(file)
 
-    # exif_data2 = open_file._getexif()
+    exif_data2 = open_file._getexif()
 
-    # print("file====================", exif_data2)
+    print("file====================", exif_data2)
 
     file.seek(0)
     s3.upload_fileobj(file, S3_INFO['bucket'], file.filename)
