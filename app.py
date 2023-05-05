@@ -59,7 +59,7 @@ def add_picture():
     s3.upload_fileobj(file, S3_INFO['bucket'], file.filename)
 
     # #TODO: potentially try/except this line
-    url = f"https://{S3_INFO['bucket']}.s3.{S3_INFO['region']}.amazonaws.com/{file.filename}"
+    url = f"https://s3.{S3_INFO['region']}.amazonaws.com/{S3_INFO['bucket']}/{file.filename}"
 
 
     return url
