@@ -1,5 +1,5 @@
 from app import app #This needs to be here even if it isn't accessed
-from models import db, Pictures
+from models import db, Picture
 
 # with app.app_context():
 
@@ -7,29 +7,40 @@ db.drop_all()
 db.create_all()
 
 
-picture1 = Pictures(
+picture1 = Picture(
     id=1,
-    dimension='1200x800',
+    filename='picture1.jpg',
     location='New York City',
-    device_make='Canon',
-    object_name='test1'
+    orientation='Portrait',
 )
 
-picture2 = Pictures(
+picture2 = Picture(
     id=2,
-    dimension='1600x900',
+    filename='picture2.jpg',
     location='San Francisco',
-    device_make='Nikon',
-    object_name='test2'
+    orientation='Landscape',
 )
 
-picture3 = Pictures(
+picture3 = Picture(
     id=3,
-    dimension='800x600',
-    location='Paris',
-    device_make='Sony',
-    object_name='test3'
+    filename='picture3.jpg',
+    location='France',
+    orientation='Landscape',
 )
 
-db.session.add_all([picture1, picture2, picture3])
+picture4 = Picture(
+    id=4,
+    filename='picture3.jpg',
+    location='Paris',
+    orientation='Portrait',
+)
+
+picture5 = Picture(
+    id=5,
+    filename='800x600',
+    location='Tokyo',
+    orientation='Portrait',
+)
+
+db.session.add_all([picture1, picture2, picture3, picture4, picture5])
 db.session.commit()

@@ -2,13 +2,13 @@ import boto3
 import os
 import PIL.Image
 
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from flask_debugtoolbar import DebugToolbarExtension
 from uuid import uuid4
 from flask_cors import CORS
 
 
-from models import db, connect_db, Pictures
+from models import db, connect_db, Picture
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,10 +20,8 @@ S3_INFO = {
     "region": "us-west-1"
 }
 
-
 app = Flask(__name__)
 CORS(app)
-
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL", 'postgresql:///pixly') #must link to db
@@ -32,7 +30,6 @@ app.config['SQLALCHEMY_ECHO'] = True #always true to see sql in terminal
 
 connect_db(app)
 
-# upload_file(file_name, bucket, object_name)
 
 app.config['SECRET_KEY'] = "SECRET!"
 debug = DebugToolbarExtension(app)
@@ -61,10 +58,10 @@ def add_picture():
     # #TODO: potentially try/except this line
     url = f"https://s3.{S3_INFO['region']}.amazonaws.com/{S3_INFO['bucket']}/{file.filename}"
 
-
     return url
 
 
+#TODO: implement search below
 @app.get('/api/pictures')
 def search():
     """Either gets all pictures or searches for specific images """
@@ -72,22 +69,8 @@ def search():
 
     search = request.args.get('q')
 
-    results = Pictures.query.filter(Pictures.description.match(search)).all()
-
-    # if not search:
-    #     pictures = Pictures.query.all()
-    # else:
-    #     users = Pictures.query.filter(User.username.like(f"%{search}%")).all()
-
-
-# onSubmit:
-#     filename = input.filename
-#     obj_name = uuid4()
-#     Pictures.add(...metadata, obj_name)
-#     s3.upload_file(filename, bucketname, obj_name)
-
-# onSearch:
-#     term = input.term
-#     picture_record = Pictures.query.all(where id = id)
-#     html_link = s3.PresignedUrl(picture_record.obj_name, exp=3600)
-#     return html_link
+    results = Picture.query.filter(Picture.description.match(search)).all()
+    if not search:
+        pictures = Picture.query.all()
+    else:
+        users = Picture.query.filter(Picture.username.like(f"%{search}%")).all()

@@ -19,7 +19,7 @@ def connect_db(app):
 
 
 
-class Pictures(db.Model):
+class Picture(db.Model):
     """Photos in the system. """
 
     __tablename__ = "pictures"
@@ -29,7 +29,7 @@ class Pictures(db.Model):
         primary_key=True,
     )
 
-    dimension = db.Column(
+    filename = db.Column(
         db.Text,
     )
 
@@ -38,18 +38,13 @@ class Pictures(db.Model):
         nullable=True,
     )
 
-    device_make = db.Column(
+    orientation = db.Column(
         db.Text,
-    )
-
-    object_name = db.Column(
-        db.Text,
-        # name = 'file_name'
     )
 
 
     __ts_vector__ = db.Column(TSVector(),db.Computed(
-         "to_tsvector('english', dimension || ' ' || location || ' ' || device_make || ' ' || object_name)",
+         "to_tsvector('english', filename || ' ' || location || ' ' || location || ' ' || orientation)",
          persisted=True))
     # __table_args__ = (Index('ix_pictures___ts_vector__',
     #       __ts_vector__, postgresql_using='gin'),)
